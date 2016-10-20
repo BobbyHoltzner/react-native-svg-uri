@@ -37,7 +37,6 @@ export default class SvgImage extends Component{
         super(props);
 
         this.state = {svgXmlData:null};
-
         if (props.source) {
             const source = resolveAssetSource(props.source) || {};
             this.fecthSVGData(source.uri);
@@ -76,9 +75,20 @@ export default class SvgImage extends Component{
                     componentAtts.width = this.props.width;
                 if (this.props.height)
                     componentAtts.height = this.props.height;
-                return <Svg  key={i} {...componentAtts}>{childs}</Svg>;
+                componentAtts.preserveAspectRatio = "true";
+                return (
+                    <Svg  
+                        key={i} 
+                        viewBox={`0 0 4700 2600`} 
+                        height={this.props.height} 
+                        width={this.props.width}
+                    >
+                        {childs}
+                    </Svg>
+                );
             case 'g':
                 componentAtts = this._getAttributes(node);
+                componentAtts.tranform = {translate: "3707.000000, 216.000000"};
                 return <G key={i} {...componentAtts}>{childs}</G>;
             case 'path':
                 componentAtts = this._getAttributes(node);
@@ -100,6 +110,7 @@ export default class SvgImage extends Component{
                 return <Stop key={i} {...componentAtts}>{childs}</Stop>;
             case 'polygon':
                 componentAtts = this._getAttributes(node);
+                componentAtts.strokeWidth = 20;
                 return <Polygon key={i} {...componentAtts}>{childs}</Polygon>;
             default:
                 return null;
@@ -132,8 +143,10 @@ export default class SvgImage extends Component{
                     }
                 }else {
                     attrs[attName] = attValue
-
                 }
+            }
+            if(attrs["stroke-width"]) {
+                attrs["strokeWidth"] = attrs["stroke-width"];
             }
         }
         return attrs
