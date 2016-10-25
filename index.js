@@ -102,6 +102,7 @@ export default class SvgImage extends Component{
                 return <G key={i} {...componentAtts}>{childs}</G>;
             case 'path':
                 componentAtts = this._getAttributes(node);
+                componentAtts.transform = this.convertTransform(componentAtts.transform);
                 return <Path  key={i} {...componentAtts}>{childs}</Path>;
             case 'circle':
                 componentAtts = this._getAttributes(node);
