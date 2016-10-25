@@ -65,12 +65,33 @@ export default class SvgImage extends Component{
     }
 
     convertTransform = (transform) => {
-        let repl = transform.replace(")", "");
-        let arr = repl.split("(");
-        let single = arr[1].split(",");
-        let translateX = single[0];
-        let translateY = single[1];
-        let transformObj = [{translateX, translateY}];
+        let arr = transform.split(") ");
+        arr = arr.filter((e) => {return e});
+        let transformArr = [];
+        for(let i = 0; i < arr.length; i++){
+            let single = arr[i].split("(");
+            transformArr.push(this.convertTransformAtt(single));
+        }
+        return transformArr;
+    }
+
+    convertTransformAtt = (single) => {
+        let transformObj;
+        let transform = single[1].split(",");
+        switch(single[0]) {
+            case "translate":
+                transformObj = {
+                    translateX: transform[0],
+                    translateY: transform[1]
+                };
+                break;
+            case "scale":
+                transformObj = {
+                    scaleX: transform[0],
+                    scaleY: transform[1]
+                };
+                break;
+        }
         return transformObj;
     }
 
@@ -98,11 +119,13 @@ export default class SvgImage extends Component{
                 );
             case 'g':
                 componentAtts = this._getAttributes(node);
-                componentAtts.transform = this.convertTransform(componentAtts.transform);
+                if(componentAtts.transform)
+                    componentAtts.transform = this.convertTransform(componentAtts.transform);  
                 return <G key={i} {...componentAtts}>{childs}</G>;
             case 'path':
                 componentAtts = this._getAttributes(node);
-                componentAtts.transform = this.convertTransform(componentAtts.transform);
+                if(componentAtts.transform)
+                     componentAtts.transform = this.convertTransform(componentAtts.transform);
                 return <Path  key={i} {...componentAtts}>{childs}</Path>;
             case 'circle':
                 componentAtts = this._getAttributes(node);
