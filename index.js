@@ -67,10 +67,10 @@ export default class SvgImage extends Component{
     convertTransform = (transform) => {
         let arr = transform.split(") ");
         arr = arr.filter((e) => {return e});
-        let transformArr = [];
+        let transformArr = {transform: []};
         for(let i = 0; i < arr.length; i++){
             let single = arr[i].split("(");
-            transformArr.push(this.convertTransformAtt(single));
+            transformArr.transform.push(this.convertTransformAtt(single));
         }
         return transformArr;
     }
