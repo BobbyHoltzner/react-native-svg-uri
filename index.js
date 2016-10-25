@@ -64,6 +64,16 @@ export default class SvgImage extends Component{
         }
     }
 
+    convertTransform = (transform) => {
+        let repl = transform.replace(")", "");
+        let arr = repl.split("(");
+        let single = arr[1].split(",");
+        let translateX = single[0];
+        let translateY = single[1];
+        let transformObj = [{translateX, translateY}];
+        return transformObj;
+    }
+
 
     createSVGElement=(node, childs)=>{
         let componentAtts = {};
@@ -79,7 +89,7 @@ export default class SvgImage extends Component{
                 return (
                     <Svg  
                         key={i} 
-                        viewBox={`0 0 3000 1720`} 
+                        viewBox={componentAtts.viewBox} 
                         height={this.props.height} 
                         width={this.props.width}
                     >
@@ -88,7 +98,7 @@ export default class SvgImage extends Component{
                 );
             case 'g':
                 componentAtts = this._getAttributes(node);
-                componentAtts.tranform = {translate: "3707.000000, 216.000000"};
+                componentAtts.transform = this.convertTransform(componentAtts.transform);
                 return <G key={i} {...componentAtts}>{childs}</G>;
             case 'path':
                 componentAtts = this._getAttributes(node);
