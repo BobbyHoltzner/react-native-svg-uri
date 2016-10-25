@@ -75,11 +75,11 @@ export default class SvgImage extends Component{
                     componentAtts.width = this.props.width;
                 if (this.props.height)
                     componentAtts.height = this.props.height;
-                componentAtts.preserveAspectRatio = "true";
+                componentAtts.preserveAspectRatio = "xMinYMax meet";
                 return (
                     <Svg  
                         key={i} 
-                        viewBox={`0 0 4700 2600`} 
+                        viewBox={`0 0 3000 1720`} 
                         height={this.props.height} 
                         width={this.props.width}
                     >
